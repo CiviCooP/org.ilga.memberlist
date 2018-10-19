@@ -43,7 +43,7 @@ class CRM_Memberlist_List {
        left join civicrm_country cn on (cn.id = a.country_id)
        left join civicrm_worldregion r on cn.region_id = r.id
        left join {$this->organisationalCustomGroup['table_name']} cg on (cg.entity_id=c.id)
-       where contact_type = 'Organization' and c.id=6251
+       where contact_type = 'Organization'
        and exists(
          select 1 from civicrm_membership m where m.contact_id = c.id
                                              and m.status_id != %1
