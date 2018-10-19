@@ -161,3 +161,10 @@ function memberlist_civicrm_navigationMenu(&$menu) {
   ));
   _memberlist_civix_navigationMenu($menu);
 } // */
+
+function memberlist_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions)
+{
+  if(strtolower($entity)=='member'&&strtolower($action)=='list'){
+    $params['check_permissions'] = false;
+  }
+}
