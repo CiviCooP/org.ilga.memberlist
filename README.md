@@ -1,15 +1,14 @@
 # org.ilga.memberlist
 
-![Screenshot](/images/screenshot.png)
 
-(*FIXME: In one or two paragraphs, describe what the extension does and why one would download it. *)
+Publish the ILGA members with an API for the use on a external website.
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
 
 ## Requirements
 
 * PHP v5.4+
-* CiviCRM (*FIXME: Version number*)
+* CiviCRM 5.3.1
 
 ## Installation (Web UI)
 
@@ -22,7 +21,7 @@ install it with the command-line tool [cv](https://github.com/civicrm/cv).
 
 ```bash
 cd <extension-dir>
-cv dl org.ilga.memberlist@https://github.com/FIXME/org.ilga.memberlist/archive/master.zip
+cv dl org.ilga.memberlist@https://github.com/CiviCooP/org.ilga.memberlist/archive/master.zip
 ```
 
 ## Installation (CLI, Git)
@@ -31,7 +30,7 @@ Sysadmins and developers may clone the [Git](https://en.wikipedia.org/wiki/Git) 
 install it with the command-line tool [cv](https://github.com/civicrm/cv).
 
 ```bash
-git clone https://github.com/FIXME/org.ilga.memberlist.git
+git clone https://github.com/CiviCooP/org.ilga.memberlist.git
 cv en memberlist
 ```
 
