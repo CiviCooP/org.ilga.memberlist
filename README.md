@@ -36,7 +36,7 @@ cv en memberlist
 
 ## Usage
 
-The api can be called by using the following url:
+The api can be called by using the following url with a POST action
 
 `https://<site>/sites/all/modules/civicrm/extern/rest.php?entity=Member&action=list&api_key=<userKey>&key=<siteKey>`
 
