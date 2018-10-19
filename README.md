@@ -36,8 +36,52 @@ cv en memberlist
 
 ## Usage
 
-(* FIXME: Where would a new user navigate to get started? What changes would they see? *)
+The api can be called by using the following url:
 
-## Known Issues
+`https://<site>/sites/all/modules/civicrm/extern/rest.php?entity=Member&action=list&api_key=<userKey>&key=<siteKey>`
 
-(* FIXME *)
+The result has the following structure
+
+```json
+{
+
+    "is_error": 0,
+    "version": 3,
+    "count": 153,
+    "values": [
+        {
+                    "contact_id": "3636",
+                    "publication": null,
+                    "organization_name": "Anonymous",
+                    "country": "American Samoa",
+                    "region": "America South, Central, North and Caribbean"
+        },
+        ...
+        ]
+}
+```
+
+This fields have the following meaning:
+
+- is_error: when the call is succesfull is_error has the value `0`.
+- count: number of organizations in the member list.
+- values: list with the organizations to be publiced.
+
+Each record in the values list has the following structure:
+
+- contact_id : CiviCRM unique id of the member.
+- publication: Does the member allow to publish its name on the website.
+- organization_name: Name of the organization of anonymous if publication is not allowed.
+- country: Name for the country of the primary address of the organization.
+- region: World region where the country is part of.
+
+The results are sorted on
+
+1. Region
+2. Country
+3. Publication
+4. Organization Name.
+
+
+
+
