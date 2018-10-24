@@ -8,6 +8,7 @@
 class CRM_Memberlist_List {
 
   var $membershipStatusId;
+  var $associateMembershipTypeId;
   var $organisationalCustomGroup;
   var $publicationOnWebsiteField;
 
@@ -27,7 +28,10 @@ class CRM_Memberlist_List {
       'custom_group_id' => "Organisational_data",
       'name' => 'Publication_of_Organiation_Data_on_website'
     ]);
-
+    $this->associateMembershipTypeId = $result = civicrm_api3('MembershipType', 'getvalue', [
+      'return' => 'id',
+      'name' => "Associate membership",
+    ]);
   }
 
   public function result(){
@@ -36,8 +40,10 @@ class CRM_Memberlist_List {
        select c.id         contact_id,
               display_name organization_name, 
               cn.name country, 
+              cn.iso_code iso_code,
               r.name region,
-              cg.{$this->publicationOnWebsiteField['column_name']} publication
+              cg.{$this->publicationOnWebsiteField['column_name']} publication,
+              'Full member' member_type
        from civicrm_contact c
        left join civicrm_address a on (a.contact_id = c.id and a.is_primary = 1)
        left join civicrm_country cn on (cn.id = a.country_id)
@@ -46,13 +52,34 @@ class CRM_Memberlist_List {
        where contact_type = 'Organization'
        and exists(
          select 1 from civicrm_membership m where m.contact_id = c.id
-                                             and m.status_id != %1
+                                            and m.status_id != %1
+                                            and m.membership_type_id != %2
           )
-       order by r.name, cn.name, publication desc, organization_name
+       union
+       select c.id         contact_id,
+              display_name organization_name, 
+              cn.name country, 
+              cn.iso_code iso_code,
+              r.name region,
+              cg.{$this->publicationOnWebsiteField['column_name']} publication,
+              'Associate member' member_type
+       from civicrm_contact c
+       left join civicrm_address a on (a.contact_id = c.id and a.is_primary = 1)
+       left join civicrm_country cn on (cn.id = a.country_id)
+       left join civicrm_worldregion r on cn.region_id = r.id
+       left join {$this->organisationalCustomGroup['table_name']} cg on (cg.entity_id=c.id)
+       where contact_type = 'Organization'
+       and exists(
+         select 1 from civicrm_membership m where m.contact_id = c.id
+                                            and m.status_id != %1
+                                            and m.membership_type_id = %2
+          )
+       order by region, country, publication desc, organization_name   
     ";
     $result = [];
     $dao = CRM_Core_DAO::executeQuery($sql,[
-      1 => [$this->membershipStatusId,'Integer']
+      1 => [$this->membershipStatusId,'Integer'],
+      2 => [$this->associateMembershipTypeId,'Integer']
     ]);
     while($dao->fetch()){
       $row = [
@@ -60,7 +87,9 @@ class CRM_Memberlist_List {
         'publication'  => $dao->publication,
         'organization_name' => $dao->publication?$dao->organization_name:'Anonymous',
         'country' => $dao->country,
-        'region'  => $dao->region
+        'is_code' => $dao->iso_code,
+        'region'  => $dao->region,
+        'member_type' => $dao->member_type,
       ];
       $result[] = $row;
     }

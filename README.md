@@ -50,11 +50,15 @@ The result has the following structure
     "count": 153,
     "values": [
         {
-                    "contact_id": "3636",
-                    "publication": null,
-                    "organization_name": "Anonymous",
-                    "country": "American Samoa",
-                    "region": "America South, Central, North and Caribbean"
+                    
+            "contact_id": "3636",
+            "publication": null,
+            "organization_name": "Anonymous",
+            "country": "American Samoa",
+            "is_code": "AS",
+            "region": "America South, Central, North and Caribbean",
+            "member_type": "Full member"
+                            
         },
         ...
         ]
@@ -73,7 +77,9 @@ Each record in the values list has the following structure:
 - publication: Does the member allow to publish its name on the website.
 - organization_name: Name of the organization of anonymous if publication is not allowed.
 - country: Name for the country of the primary address of the organization.
+- iso_code: Standard Iso code of the country (2 characters capitals) 
 - region: World region where the country is part of.
+- member_type: Associate member for associates, Full member for other meberships.
 
 The results are sorted on
 
