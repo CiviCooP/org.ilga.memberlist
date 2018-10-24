@@ -82,10 +82,23 @@ class CRM_Memberlist_List {
       2 => [$this->associateMembershipTypeId,'Integer']
     ]);
     while($dao->fetch()){
+
+      if(isset($dao->publication)){
+        // member said something about publication : follow his orders.
+        if($dao->publication){
+          $publication = 1;
+        } else {
+          $publication = 0;
+        }
+      // member said nothing about publication, publish by default.
+      } else {
+        $publication = 1;
+      }
+
       $row = [
         'contact_id' => $dao->contact_id,
-        'publication'  => $dao->publication,
-        'organization_name' => $dao->publication?$dao->organization_name:'Anonymous',
+        'publication'  => $publication,
+        'organization_name' => $publication?$dao->organization_name:'Anonymous',
         'country' => $dao->country,
         'is_code' => $dao->iso_code,
         'region'  => $dao->region,
