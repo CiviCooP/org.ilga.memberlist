@@ -113,8 +113,12 @@ class CRM_Memberlist_List {
         'region'  => $dao->region,
         'member_type' => $dao->member_type,
       ];
-      if($anonymous && !$publication) {
-        $result[] = $row;
+      if($anonymous) {
+        if($publication){
+           // do nothing if anonymous to to publicate
+        } else {
+          $result[] = $row;
+        }
       } else {
         $result[] = $row;
       }
