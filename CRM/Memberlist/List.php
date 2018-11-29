@@ -11,11 +11,12 @@ class CRM_Memberlist_List {
   var $associateMembershipTypeId;
   var $organisationalCustomGroup;
   var $publicationOnWebsiteField;
+  var $params;
 
   /**
    * CRM_Memberlist_List constructor.
    */
-  public function __construct() {
+  public function __construct($params) {
 
     $this->membershipStatusId = civicrm_api3('MembershipStatus', 'getvalue', [
       'return' => "id",
@@ -32,9 +33,17 @@ class CRM_Memberlist_List {
       'return' => 'id',
       'name' => "Associate membership",
     ]);
+
+    $this->params = $params;
   }
 
   public function result(){
+
+    if(isset($this->params['anonymous']) && $this->params['anonymous']){
+      $anonymous = true;
+    } else {
+      $anonymous = false;
+    }
 
     $sql = "
        select c.id         contact_id,
@@ -104,9 +113,14 @@ class CRM_Memberlist_List {
         'region'  => $dao->region,
         'member_type' => $dao->member_type,
       ];
-      $result[] = $row;
+      if($anonymous && !$publication) {
+        $result[] = $row;
+      } else {
+        $result[] = $row;
+      }
     }
     return $result;
+
   }
 
 }

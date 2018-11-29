@@ -29,7 +29,7 @@ function _civicrm_api3_member_List_spec(&$spec) {
  */
 function civicrm_api3_member_List($params) {
   try{
-    $list = new CRM_Memberlist_List();
+    $list = new CRM_Memberlist_List($params);
     $result = $list->result();
     return civicrm_api3_create_success($result, $params, 'Member', 'List');
   }
