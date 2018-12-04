@@ -12,6 +12,8 @@ class CRM_Memberlist_List {
   var $organisationalCustomGroup;
   var $publicationOnWebsiteField;
   var $params;
+  var $countries = array();
+  var $result = array();
 
   /**
    * CRM_Memberlist_List constructor.
@@ -37,7 +39,7 @@ class CRM_Memberlist_List {
     $this->params = $params;
   }
 
-  public function result(){
+  public function calculate(){
 
     if(isset($this->params['anonymous']) && $this->params['anonymous']){
       $anonymous = true;
@@ -85,7 +87,8 @@ class CRM_Memberlist_List {
           )
        order by region, country, publication desc, organization_name   
     ";
-    $result = [];
+    $this->result = [];
+    $this->countries = [];
     $dao = CRM_Core_DAO::executeQuery($sql,[
       1 => [$this->membershipStatusId,'Integer'],
       2 => [$this->associateMembershipTypeId,'Integer']
@@ -107,7 +110,7 @@ class CRM_Memberlist_List {
       $row = [
         'contact_id' => $dao->contact_id,
         'publication'  => $publication,
-        'organization_name' => $publication?$dao->organization_name:'Anonymous',
+        'organization_name' => $publication?$dao->organization_name:$dao->organization_name,
         'country' => $dao->country,
         'is_code' => $dao->iso_code,
         'region'  => $dao->region,
@@ -117,14 +120,22 @@ class CRM_Memberlist_List {
         if($publication){
            // do nothing if anonymous to to publicate
         } else {
-          $result[] = $row;
+          $this->result[] = $row;
+          $this->countries[$dao->iso_code]=true;
         }
       } else {
-        $result[] = $row;
+        $this->result[] = $row;
+        $this->countries[$dao->iso_code]=true;
       }
     }
-    return $result;
+  }
 
+  public function result(){
+    return $this->result;
+  }
+
+  public function countCountries(){
+    return count($this->countries);
   }
 
 }

@@ -30,8 +30,11 @@ function _civicrm_api3_member_List_spec(&$spec) {
 function civicrm_api3_member_List($params) {
   try{
     $list = new CRM_Memberlist_List($params);
+    $list->calculate();
     $result = $list->result();
-    return civicrm_api3_create_success($result, $params, 'Member', 'List');
+    $toReturn = civicrm_api3_create_success($result, $params, 'Member', 'List');
+    $toReturn['count_countries'] = $list->countCountries();
+    return $toReturn;
   }
   catch (Exception $ex) {
     throw new API_Exception($ex->getMessage());

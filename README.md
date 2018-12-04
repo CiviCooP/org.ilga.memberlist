@@ -61,7 +61,8 @@ The result has the following structure
                             
         },
         ...
-        ]
+        ],
+      "count_countries": 13    
 }
 ```
 
@@ -70,6 +71,7 @@ This fields have the following meaning:
 - is_error: when the call is succesfull is_error has the value `0`.
 - count: number of organizations in the member list.
 - values: list with the organizations to be publiced.
+- count_countries: the number of countries that is in the member list (actual the number of unique iso_codes)
 
 Each record in the values list has the following structure:
 
