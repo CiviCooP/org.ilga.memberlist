@@ -110,7 +110,7 @@ class CRM_Memberlist_List {
       $row = [
         'contact_id' => $dao->contact_id,
         'publication'  => $publication,
-        'organization_name' => $publication?$dao->organization_name:$dao->organization_name,
+        'organization_name' => $publication?$dao->organization_name:'Anonymous',
         'country' => $dao->country,
         'is_code' => $dao->iso_code,
         'region'  => $dao->region,
